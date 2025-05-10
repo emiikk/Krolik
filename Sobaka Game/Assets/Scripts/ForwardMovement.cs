@@ -2,39 +2,29 @@ using UnityEngine;
 
 public class ForwardMovement : MonoBehaviour
 {
-    public float force = 0.1f; // Сила, с которой бросаем объект
-
+    public float moveSpeed = 1f;
     private Rigidbody rb;
+    private float borderZ = 2f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
         if (rb == null)
         {
-            
+            Debug.Log("No Rigidbody found");
             enabled = false;
         }
     }
 
     void Update()
     {
-        Throw();
-    }
-
-    void Throw()
-    {
-        if (rb != null)
+        rb.AddForce(transform.forward * moveSpeed, ForceMode.Force);
+        if (transform.position.z > borderZ)
         {
-            // Отключаем кинематику, чтобы физика начала работать
-            rb.isKinematic = false;
-            // Включаем гравитацию
-            rb.useGravity = true;
-
-            // Направляем бросок вперед от объекта
-            Vector3 direction = transform.forward;
-
-            // Добавляем силу в этом направлении
-            rb.AddForce(direction * force, ForceMode.Impulse);
+            Destroy(gameObject);
         }
     }
+
+    
 }
